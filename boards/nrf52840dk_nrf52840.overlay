@@ -1,0 +1,36 @@
+/* boards/nrf52840dk_nrf52840.overlay */
+
+/ {
+     aliases {
+         /* so in code you can do DEVICE_DT_GET(DT_ALIAS(dht11)) */
+         dht11 = &dht11_node;
+         //the above line is doing the following things
+            //1. It creates an alias named "dht11" that points to the dht11_node.
+            //2. It allows you to access the DHT11 sensor node using the alias "dht11" in your code.
+     };
+ };
+
+ &gpio0 {
+     /* Attach DHT11 on P0.31 */
+     dht11_node: dht11 {
+    compatible = "aosong,dht";  // ✅ Matches DT_DRV_COMPAT
+  // Match driver binding
+    dio-gpios = <&gpio0 31 (GPIO_OPEN_DRAIN | GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; 
+    //the above line is  doing the following things:
+    //1. It specifies the GPIO pin (P0.31) used for data communication with the DHT11 sensor.
+    //2. It configures the pin as an open-drain output with a pull-up resistor and active-low logic.
+    //This means that the pin can pull low to signal data, and it will be pulled
+    //high when not actively driving the line.
+    //This configuration is typical for DHT11 sensors, which use a single-wire protocol for
+    //communication.
+    //The pin is configured to be open-drain, which means it can either pull the
+    //line low or leave it floating (high) when not transmitting data.
+    //The pull-up resistor ensures that the line is high when not being driven low by the
+    //DHT11 sensor.
+    //The active-low configuration means that a low signal on this pin indicates data being sent
+    //from the DHT11 sensor to the microcontroller.
+
+
+    label = "DHT11";
+};
+ };
